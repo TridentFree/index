@@ -28,7 +28,7 @@ WordPress blocks `.html`/`.js` uploads through the Media Library by default, so 
 
    ```html
    <iframe
-     src="https://yourdomain.com/ecuador-proposal/index.html"
+     src="https://github.com/TridentFree/index.git"
      width="100%"
      height="2400"
      style="border:0; max-width:1400px; display:block; margin:0 auto;"
