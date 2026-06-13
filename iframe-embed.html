@@ -1,0 +1,56 @@
+<!--
+  Paste this snippet into a WordPress "Custom HTML" block.
+  Replace YOURDOMAIN.COM/ecuador-proposal/ with the actual path where you uploaded the files.
+  This version auto-resizes (works only when iframe is on the same domain as WordPress).
+-->
+
+<iframe
+  id="ecuador-proposal-frame"
+  src="https://YOURDOMAIN.COM/ecuador-proposal/index.html"
+  width="100%"
+  style="border:0; display:block; margin:0 auto; max-width:1400px;"
+  loading="lazy"
+  title="Ecuador Strategic Partnership Proposal"
+></iframe>
+
+<script>
+(function () {
+  var f = document.getElementById('ecuador-proposal-frame');
+  if (!f) return;
+  function resize() {
+    try {
+      var doc = f.contentWindow.document;
+      var h = Math.max(
+        doc.documentElement.scrollHeight,
+        doc.body.scrollHeight
+      );
+      f.style.height = (h + 40) + 'px';
+    } catch (e) { /* cross-origin — set a fixed height instead */ }
+  }
+  f.addEventListener('load', function () {
+    resize();
+    setTimeout(resize, 500);
+    setTimeout(resize, 1500);
+    try {
+      f.contentWindow.addEventListener('resize', resize);
+      new MutationObserver(resize).observe(f.contentDocument.body, {
+        childList: true, subtree: true, attributes: true
+      });
+    } catch (e) {}
+  });
+})();
+</script>
+
+<!--
+  STATIC HEIGHT FALLBACK (use this instead if the iframe is on a different domain):
+
+  <iframe
+    src="https://YOURDOMAIN.COM/ecuador-proposal/index.html"
+    width="100%"
+    height="2800"
+    style="border:0; max-width:1400px; display:block; margin:0 auto;"
+    loading="lazy"
+    title="Ecuador Strategic Partnership Proposal"
+    allow="fullscreen"
+  ></iframe>
+-->
