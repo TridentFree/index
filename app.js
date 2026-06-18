@@ -1,8 +1,18 @@
 /* ============================================================
    Ecuador Strategic Partnership — Interactive Sales Tool
    Customer-facing only.
-   Fixed-fee + phase-tied milestone payment structure.
+   Independent per-workstream durations; Workstream I governs max.
+   Program Activation Fee (flat $) + phase-tied milestone payments.
+   Workstream III 12-Month = informational only (no fee/schedule).
+   Bilingual EN/ES via window.I18N (see i18n.js).
    ============================================================ */
+
+// Convenience accessor — falls back to the key itself if i18n.js
+// hasn't loaded yet (graceful degradation).
+function t(key) {
+  if (window.I18N && typeof window.I18N.t === 'function') return window.I18N.t(key);
+  return key;
+}
 
 // ---------- Footer year & nav scroll state ----------
 document.getElementById('yr').textContent = new Date().getFullYear();
@@ -12,7 +22,7 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
-// ---------- Workstream tabs ----------
+// ---------- Workstream tabs (overview) ----------
 document.querySelectorAll('.tab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => {
@@ -38,148 +48,178 @@ document.querySelectorAll('.t-phase').forEach(btn => {
 
 // ============================================================
 //  CONTRACT VALUES & PAYMENT STRUCTURE
+//  Milestone names & triggers are translated at render time via i18n keys.
 // ============================================================
 
 const WS = {
   1: {
-    name: 'Security Modernization & ISR Foundation',
+    nameKey: 'js.ws1.name',
     contracts: { 3:  750000, 6: 1260000, 12: 2140000 },
+    activation: { 3: 450000, 6: 600000, 12: 600000 },
     milestones: {
       3: [
-        { name: 'M1 — Security Assessment Delivered',  trigger: 'Comprehensive Security Assessment Report & Threat Analysis delivered', month: 2 },
-        { name: 'M2 — Modernization Recommendations',  trigger: 'Capability gap analysis & preliminary modernization roadmap delivered',    month: 3 },
+        { nameKey: 'js.ws1.t3.m1.name', trigKey: 'js.ws1.t3.m1.trig', month: 2 },
+        { nameKey: 'js.ws1.t3.m2.name', trigKey: 'js.ws1.t3.m2.trig', month: 3 },
       ],
       6: [
-        { name: 'M1 — Security Assessment Delivered',  trigger: 'National & ISR Security Assessment, Border/Port/Maritime review delivered', month: 3 },
-        { name: 'M2 — Modernization Roadmap',          trigger: 'National Modernization Roadmap, ISR Architecture Framework & Procurement Roadmap delivered', month: 5 },
-        { name: 'M3 — Implementation Readiness',       trigger: 'Strategic partner recommendations & implementation readiness review accepted', month: 6 },
+        { nameKey: 'js.ws1.t6.m1.name', trigKey: 'js.ws1.t6.m1.trig', month: 3 },
+        { nameKey: 'js.ws1.t6.m2.name', trigKey: 'js.ws1.t6.m2.trig', month: 5 },
+        { nameKey: 'js.ws1.t6.m3.name', trigKey: 'js.ws1.t6.m3.trig', month: 6 },
       ],
       12: [
-        { name: 'M1 — Security Assessment Delivered',  trigger: 'National & ISR Security Assessment, Threat & Capability Gap Analysis delivered', month: 3 },
-        { name: 'M2 — Modernization Architecture',     trigger: 'National Modernization Roadmap, ISR Architecture & Procurement Roadmap delivered', month: 6 },
-        { name: 'M3 — Capability Integration',         trigger: 'Procurement integration, training coordination & quarterly strategic reviews delivered', month: 12 },
+        { nameKey: 'js.ws1.t12.m1.name', trigKey: 'js.ws1.t12.m1.trig', month: 3 },
+        { nameKey: 'js.ws1.t12.m2.name', trigKey: 'js.ws1.t12.m2.trig', month: 6 },
+        { nameKey: 'js.ws1.t12.m3.name', trigKey: 'js.ws1.t12.m3.trig', month: 12 },
       ],
     },
   },
   2: {
-    name: 'Intelligence Fusion & Targeting',
+    nameKey: 'js.ws2.name',
     contracts: { 3:  500000, 6:  752000, 12: 1280000 },
+    activation: { 3: 300000, 6: 300000, 12: 512000 },
     milestones: {
       3: [
-        { name: 'M1 — Intelligence Fusion Assessment', trigger: 'Intelligence Fusion & Targeting Assessment, Counter-Narcotics Assessment delivered', month: 2 },
-        { name: 'M2 — Targeting Framework Outline',    trigger: 'Preliminary National Targeting Framework & operational integration recommendations delivered', month: 3 },
+        { nameKey: 'js.ws2.t3.m1.name', trigKey: 'js.ws2.t3.m1.trig', month: 2 },
+        { nameKey: 'js.ws2.t3.m2.name', trigKey: 'js.ws2.t3.m2.trig', month: 3 },
       ],
       6: [
-        { name: 'M1 — Fusion & Targeting Assessment',  trigger: 'Intelligence Fusion Assessment & Operational Synchronization Assessment delivered', month: 3 },
-        { name: 'M2 — Targeting Framework Delivered',  trigger: 'National Targeting Framework, Intelligence Sharing Framework & Fusion Cell Blueprint delivered', month: 5 },
-        { name: 'M3 — Operational Integration Plan',   trigger: 'Operational Integration Roadmap & Procurement Roadmap accepted', month: 6 },
+        { nameKey: 'js.ws2.t6.m1.name', trigKey: 'js.ws2.t6.m1.trig', month: 3 },
+        { nameKey: 'js.ws2.t6.m2.name', trigKey: 'js.ws2.t6.m2.trig', month: 5 },
+        { nameKey: 'js.ws2.t6.m3.name', trigKey: 'js.ws2.t6.m3.trig', month: 6 },
       ],
       12: [
-        { name: 'M1 — Fusion & Targeting Assessment',  trigger: 'Intelligence Fusion, Targeting & Counter-Narcotics Assessments delivered', month: 3 },
-        { name: 'M2 — Targeting Architecture',         trigger: 'National Targeting Framework, Fusion Cell Blueprint & Operational Integration Roadmap delivered', month: 6 },
-        { name: 'M3 — Fusion Implementation Support',  trigger: 'Fusion implementation support, operational integration & training coordination delivered', month: 12 },
+        { nameKey: 'js.ws2.t12.m1.name', trigKey: 'js.ws2.t12.m1.trig', month: 3 },
+        { nameKey: 'js.ws2.t12.m2.name', trigKey: 'js.ws2.t12.m2.trig', month: 6 },
+        { nameKey: 'js.ws2.t12.m3.name', trigKey: 'js.ws2.t12.m3.trig', month: 12 },
       ],
     },
   },
   3: {
-    name: 'Strategic Resource Security & Critical Minerals',
-    advisory: true,  // advisory-only workstream — execution requires future negotiation
+    nameKey: 'js.ws3.name',
+    advisory: true,
     contracts: { 3:  175000, 6:  257000, 12:  638000 },
+    activation: { 3: 120000, 6: 120000, 12: 0 },
     milestones: {
       3: [
-        { name: 'M1 — Resource & Value Assessment',    trigger: 'Strategic Resource Assessment & Strategic Value Assessment delivered', month: 2 },
-        { name: 'M2 — Security & Commercial Outline',  trigger: 'Resource Security Assessment & preliminary commercial development outline delivered', month: 3 },
+        { nameKey: 'js.ws3.t3.m1.name', trigKey: 'js.ws3.t3.m1.trig', month: 2 },
+        { nameKey: 'js.ws3.t3.m2.name', trigKey: 'js.ws3.t3.m2.trig', month: 3 },
       ],
       6: [
-        { name: 'M1 — Resource & Value Assessment',    trigger: 'Strategic Resource Assessment, Resource Security & Infrastructure Assessment delivered', month: 3 },
-        { name: 'M2 — Critical Minerals Roadmap',      trigger: 'Critical Minerals Strategic Recommendations & validation outcomes delivered', month: 5 },
-        { name: 'M3 — Strategic Recommendations',      trigger: 'Strategic Recommendation Brief & Resource Security Framework accepted', month: 6 },
+        { nameKey: 'js.ws3.t6.m1.name', trigKey: 'js.ws3.t6.m1.trig', month: 3 },
+        { nameKey: 'js.ws3.t6.m2.name', trigKey: 'js.ws3.t6.m2.trig', month: 5 },
+        { nameKey: 'js.ws3.t6.m3.name', trigKey: 'js.ws3.t6.m3.trig', month: 6 },
       ],
-      12: [
-        { name: 'M1 — Resource & Value Assessment',           trigger: 'Strategic Resource, Security, Value & Infrastructure Assessments delivered', month: 3 },
-        { name: 'M2 — Mapping & Validation Outcomes',         trigger: 'Validated mapping, geological findings & Critical Minerals Strategic Recommendations delivered (advisory)', month: 6 },
-        { name: 'M3 — Advisory & Strategic Recommendations',  trigger: 'Continued advisory support, stakeholder engagement & development pathway analysis delivered — advisory only; execution subject to future negotiation following Stage 2 validation', month: 12 },
-      ],
+      12: [],
     },
   },
 };
 
-// Payment structure per term:
-//   fixedPct      = upfront mobilization fee (% of each workstream's contract value)
-//   milestonePcts = milestone payment weights as % of contract value (must sum to 1 - fixedPct)
-const PAYMENT_STRUCTURE = {
-  3:  { fixedPct: 0.60, milestonePcts: [0.25, 0.15] },
-  6:  { fixedPct: 0.50, milestonePcts: [0.25, 0.15, 0.10] },
-  12: { fixedPct: 0.40, milestonePcts: [0.25, 0.20, 0.15] },
+// Milestone weights — distribute the post-activation remainder.
+const MILESTONE_WEIGHTS = {
+  3:  [0.625, 0.375],
+  6:  [0.50, 0.30, 0.20],
+  12: [5/12, 4/12, 3/12],
 };
 
+const TERM_ORDER = [3, 6, 12];
+
+function termLabel(term) { return t('js.term.' + term + '.full'); }
+function termShort(term) { return t('js.term.' + term + '.short'); }
+
+// USD amounts are kept in US format regardless of language (currency consistency).
 const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
-const ordinal = (n) => n + (['th','st','nd','rd'][((n%100-20)%10<4&&(n%100-20)%10>0)?(n%100-20)%10:(n%100<4?n%100:0)]||'th');
 
 // ---------- State ----------
 let state = {
   ws: new Set([1]),
-  term: 12,
-  view: 'monthly',  // 'monthly' or 'milestone'
+  wsTerms: { 1: 12, 2: 12, 3: 12 },
+  view: 'monthly',
 };
 
 function selectedWorkstreams() { return Array.from(state.ws).sort(); }
 
-function workstreamLabel() {
-  const ids = selectedWorkstreams();
-  if (ids.length === 3) return 'Full Initiative';
-  const roman = { 1: 'I', 2: 'II', 3: 'III' };
-  return 'Workstream ' + ids.map(i => roman[i]).join(' + ');
+function maxAllowedTerm(wsId) {
+  if (wsId === 1) return 12;
+  return state.wsTerms[1];
 }
 
-function termLabel() {
-  return { 3: '90-Day Introductory Assessment',
-           6: '6-Month Foundation Program',
-          12: '12-Month Strategic Partnership' }[state.term];
+function effectiveTerm(wsId) {
+  const cap = maxAllowedTerm(wsId);
+  const sel = state.wsTerms[wsId];
+  return Math.min(sel, cap);
+}
+
+function workstreamLabel() {
+  const ids = selectedWorkstreams();
+  if (ids.length === 3) return t('js.fullInitiative');
+  const roman = { 1: 'I', 2: 'II', 3: 'III' };
+  return t('js.workstream') + ' ' + ids.map(i => roman[i]).join(' + ');
 }
 
 function compute() {
   const ids = selectedWorkstreams();
-  const months = state.term;
-  const struct = PAYMENT_STRUCTURE[months];
-
   const wsBreakdown = ids.map(id => {
     const w = WS[id];
-    const value = w.contracts[months];
-    const wsMilestones = w.milestones[months];
+    const term = effectiveTerm(id);
+    const value = w.contracts[term];
+    const activation = w.activation[term] || 0;
+    const wsMilestones = w.milestones[term] || [];
+    const milestoneRemainder = Math.max(0, value - activation);
+    const weights = MILESTONE_WEIGHTS[term] || [];
+    const isInfoOnly = (w.advisory === true && term === 12);
+
     return {
-      id, name: w.name, value,
-      fixed: value * struct.fixedPct,
+      id, name: t(w.nameKey), value, term, activation,
+      isInfoOnly,
       milestones: wsMilestones.map((m, i) => ({
-        name: m.name, trigger: m.trigger, month: m.month,
-        amount: value * struct.milestonePcts[i],
+        name: t(m.nameKey),
+        trigger: t(m.trigKey),
+        month: m.month,
+        amount: milestoneRemainder * (weights[i] || 0),
       })),
+      milestoneRemainder,
     };
   });
 
   const total = wsBreakdown.reduce((s, w) => s + w.value, 0);
-  const totalFixed = wsBreakdown.reduce((s, w) => s + w.fixed, 0);
-  const totalMilestone = total - totalFixed;
+  const totalActivation = wsBreakdown.reduce((s, w) => s + w.activation, 0);
+  const totalMilestone = wsBreakdown.reduce((s, w) => s + w.milestoneRemainder, 0);
+  const longestTerm = Math.max(...wsBreakdown.map(w => w.term));
 
   return {
-    rows: wsBreakdown, total, months,
-    fixedPct: struct.fixedPct,
-    totalFixed, totalMilestone,
-    monthly: total / months,
+    rows: wsBreakdown, total,
+    totalActivation, totalMilestone,
+    longestTerm,
+    monthly: total / longestTerm,
   };
 }
 
 // ---------- Render: live summary ----------
 function render() {
+  syncTermAvailability();
+
   const c = compute();
 
-  document.getElementById('cs-headline').textContent =
-    `${workstreamLabel()} · ${termLabel()}`;
+  // Build a headline that reflects the configuration
+  const ids = selectedWorkstreams();
+  let headline;
+  const WS_WORD = t('js.workstream');
+  if (ids.length === 1) {
+    headline = WS_WORD + ' I · ' + termLabel(c.rows[0].term);
+  } else if (ids.length === 3 &&
+             c.rows.every(r => r.term === c.rows[0].term)) {
+    headline = t('js.fullInitiative') + ' · ' + termLabel(c.rows[0].term);
+  } else {
+    const parts = c.rows.map(r => 'WS ' + ({1:'I',2:'II',3:'III'}[r.id]) + ' (' + termShort(r.term) + ')');
+    headline = parts.join(' · ');
+  }
+  document.getElementById('cs-headline').textContent = headline;
 
+  const advisoryInfoTag = t('js.advisoryInfoOnly');
   const rowsEl = document.getElementById('cs-rows');
   rowsEl.innerHTML = c.rows.map(r => `
     <div class="cs-row">
-      <span class="label">Workstream ${ {1:'I',2:'II',3:'III'}[r.id] } &mdash; ${r.name}</span>
+      <span class="label">${WS_WORD} ${ {1:'I',2:'II',3:'III'}[r.id] } &mdash; ${r.name} <em style="font-style:normal;color:var(--muted);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:4px">${termShort(r.term)}${r.isInfoOnly ? ' · ' + advisoryInfoTag : ''}</em></span>
       <span class="val">${fmt(r.value)}</span>
     </div>
   `).join('');
@@ -193,54 +233,67 @@ function render() {
   document.getElementById('pane-milestone').classList.toggle('is-active', state.view === 'milestone');
 
   // Monthly view
-  document.getElementById('cs-monthly').textContent = fmt(c.monthly) + ' / mo';
-  document.getElementById('cs-fixed-monthly').textContent = fmt(c.totalFixed);
+  document.getElementById('cs-monthly').textContent = fmt(c.monthly) + ' ' + t('js.perMo');
+  document.getElementById('cs-fixed-monthly').textContent = fmt(c.totalActivation);
   document.getElementById('cs-milestone-total-monthly').textContent = fmt(c.totalMilestone);
 
-  // Milestone view — fixed + per-workstream schedule
-  document.getElementById('cs-fixed').textContent = fmt(c.totalFixed);
-  document.getElementById('cs-fixed-pct').textContent = Math.round(c.fixedPct * 100) + '%';
+  // Milestone view
+  document.getElementById('cs-fixed').textContent = fmt(c.totalActivation);
+  document.getElementById('cs-fixed-pct').textContent = c.total > 0 ? Math.round((c.totalActivation/c.total)*100) + '%' : '';
   document.getElementById('cs-milestone-total').textContent = fmt(c.totalMilestone);
-  document.getElementById('cs-milestone-pct').textContent = Math.round((1 - c.fixedPct) * 100) + '%';
+  document.getElementById('cs-milestone-pct').textContent = c.total > 0 ? Math.round((c.totalMilestone/c.total)*100) + '%' : '';
 
-  // Build milestone schedule table — one section per workstream
+  // Per-workstream milestone schedule
+  const monthWord = t('js.month');
   const milestoneEl = document.getElementById('cs-milestone-schedule');
   milestoneEl.innerHTML = c.rows.map(r => {
     const wsRoman = {1:'I',2:'II',3:'III'}[r.id];
     const isAdvisory = WS[r.id].advisory === true;
     const advisoryBadge = isAdvisory
-      ? '<span class="ms-advisory-badge" title="Advisory engagement — execution subject to future negotiation">Advisory</span>'
+      ? `<span class="ms-advisory-badge" title="${t('js.advisoryTooltip')}">${t('js.advisoryBadge')}</span>`
       : '';
-    const advisoryNote = (isAdvisory && state.term === 12)
-      ? `<p class="ms-advisory-note"><strong>Advisory Information Edition.</strong> The 12-month Workstream III engagement provides continued advisory support, assessment refinement, strategic resource validation, stakeholder engagement, and development of strategic recommendations. It does <strong>not</strong> authorize or initiate resource extraction, processing facilities, infrastructure development, or commercialization activities. Implementation of those activities is subject to future negotiation following Stage 2 validation.</p>`
-      : (isAdvisory
-          ? `<p class="ms-advisory-note">Workstream III is an advisory engagement. Implementation of resource extraction, processing, infrastructure development, or commercialization activities is not included and remains subject to future negotiation.</p>`
-          : '');
+
+    // Workstream III 12-Month: informational only — no payment schedule
+    if (r.isInfoOnly) {
+      return `
+        <div class="ms-block is-advisory">
+          <p class="ms-block-title">${WS_WORD} ${wsRoman} &mdash; ${r.name}${advisoryBadge}</p>
+          <p class="ms-advisory-note">${t('js.ws3.info.p1')}</p>
+          <p class="ms-advisory-note">${t('js.ws3.info.p2')}</p>
+          <p class="ms-advisory-note">${t('js.ws3.info.p3')}</p>
+        </div>
+      `;
+    }
+
+    const advisoryNote = isAdvisory
+      ? `<p class="ms-advisory-note">${t('js.ws3.advisory.note')}</p>`
+      : '';
+
     return `
       <div class="ms-block${isAdvisory ? ' is-advisory' : ''}">
-        <p class="ms-block-title">Workstream ${wsRoman} &mdash; ${r.name}${advisoryBadge}</p>
+        <p class="ms-block-title">${WS_WORD} ${wsRoman} &mdash; ${r.name} <em style="font-style:normal;color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-left:8px">${termShort(r.term)}</em>${advisoryBadge}</p>
         ${advisoryNote}
         <table class="ms-table">
           <thead>
-            <tr><th>Payment</th><th>Trigger</th><th class="num">Month</th><th class="num">Amount</th></tr>
+            <tr><th>${t('js.tbl.payment')}</th><th>${t('js.tbl.trigger')}</th><th class="num">${t('js.tbl.month')}</th><th class="num">${t('js.tbl.amount')}</th></tr>
           </thead>
           <tbody>
             <tr class="ms-fixed">
-              <td><strong>Mobilization Fee</strong></td>
-              <td>Contract execution &amp; engagement kickoff</td>
-              <td class="num">Month 0</td>
-              <td class="num">${fmt(r.fixed)}</td>
+              <td><strong>${t('js.activationFee')}</strong></td>
+              <td>${t('js.activationTrigger')}</td>
+              <td class="num">${monthWord} 0</td>
+              <td class="num">${fmt(r.activation)}</td>
             </tr>
-            ${r.milestones.map((m, i) => `
+            ${r.milestones.map((m) => `
               <tr>
                 <td><strong>${m.name}</strong></td>
                 <td>${m.trigger}</td>
-                <td class="num">Month ${m.month}</td>
+                <td class="num">${monthWord} ${m.month}</td>
                 <td class="num">${fmt(m.amount)}</td>
               </tr>
             `).join('')}
             <tr class="ms-subtotal">
-              <td colspan="3">Workstream ${wsRoman} Subtotal</td>
+              <td colspan="3">${WS_WORD} ${wsRoman} ${t('js.subtotal')}</td>
               <td class="num">${fmt(r.value)}</td>
             </tr>
           </tbody>
@@ -251,21 +304,54 @@ function render() {
 
   // Contextual note
   const note = document.getElementById('cs-note');
+  const ws1Term = state.wsTerms[1];
   let baseNote;
-  if (state.term === 3) {
-    baseNote = 'Ninety-day introductory engagement. ' + Math.round(c.fixedPct*100) + '% mobilization fee at contract execution; remainder released against assessment and roadmap deliverables.';
-  } else if (state.term === 6) {
-    baseNote = 'Six-month foundation program. ' + Math.round(c.fixedPct*100) + '% mobilization fee at contract execution; remainder released against three phase-aligned milestones.';
+  if (ws1Term === 3) {
+    baseNote = t('js.note.t3');
+  } else if (ws1Term === 6) {
+    baseNote = t('js.note.t6');
   } else {
-    baseNote = 'Twelve-month Strategic Partnership. ' + Math.round(c.fixedPct*100) + '% mobilization fee at contract execution; remainder released against three phase-aligned milestones spanning the engagement.';
+    baseNote = t('js.note.t12');
   }
-  if (state.ws.has(3)) {
-    baseNote += ' Workstream III is structured as an advisory engagement — resource extraction, processing, infrastructure development, and commercialization activities are not included and are subject to future negotiation following Stage 2 validation.';
+  if (state.ws.has(3) && effectiveTerm(3) === 12) {
+    baseNote += ' ' + t('js.note.ws3.info');
+  } else if (state.ws.has(3)) {
+    baseNote += ' ' + t('js.note.ws3');
   }
   note.textContent = baseNote;
 }
 
+// Disable/enable per-workstream term buttons based on WS I's term and selection state
+function syncTermAvailability() {
+  const ws1Term = state.wsTerms[1];
+
+  document.querySelectorAll('.ws-seg').forEach(seg => {
+    const wsId = +seg.dataset.wsSeg;
+    const selected = state.ws.has(wsId);
+
+    seg.querySelectorAll('.seg-btn[data-term]').forEach(btn => {
+      const term = +btn.dataset.term;
+      let disabled = false;
+
+      if (wsId !== 1) {
+        if (term > ws1Term) disabled = true;
+        if (!selected) disabled = true;
+      }
+
+      btn.classList.toggle('is-disabled', disabled);
+      if (disabled) btn.setAttribute('aria-disabled', 'true');
+      else btn.removeAttribute('aria-disabled');
+    });
+
+    const effective = effectiveTerm(wsId);
+    seg.querySelectorAll('.seg-btn[data-term]').forEach(btn => {
+      btn.classList.toggle('is-active', +btn.dataset.term === effective);
+    });
+  });
+}
+
 // ---------- Wire controls ----------
+
 document.querySelectorAll('.toggle input[data-ws]').forEach(inp => {
   inp.addEventListener('change', () => {
     const id = +inp.dataset.ws;
@@ -275,16 +361,24 @@ document.querySelectorAll('.toggle input[data-ws]').forEach(inp => {
   });
 });
 
-document.querySelectorAll('.seg-btn[data-term]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.seg-btn[data-term]').forEach(b => b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    state.term = +btn.dataset.term;
-    render();
+document.querySelectorAll('.ws-seg').forEach(seg => {
+  const wsId = +seg.dataset.wsSeg;
+  seg.querySelectorAll('.seg-btn[data-term]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-disabled')) return;
+      const term = +btn.dataset.term;
+      state.wsTerms[wsId] = term;
+
+      if (wsId === 1) {
+        if (state.wsTerms[2] > term) state.wsTerms[2] = term;
+        if (state.wsTerms[3] > term) state.wsTerms[3] = term;
+      }
+
+      render();
+    });
   });
 });
 
-// View tabs (Monthly / Milestone)
 document.getElementById('view-monthly').addEventListener('click', () => {
   state.view = 'monthly';
   render();
@@ -296,13 +390,13 @@ document.getElementById('view-milestone').addEventListener('click', () => {
 
 document.getElementById('preset-full').addEventListener('click', () => {
   state.ws = new Set([1, 2, 3]);
-  state.term = 12;
+  state.wsTerms = { 1: 12, 2: 12, 3: 12 };
   syncControls();
   render();
 });
 document.getElementById('preset-reset').addEventListener('click', () => {
   state.ws = new Set([1]);
-  state.term = 6;
+  state.wsTerms = { 1: 6, 2: 6, 3: 6 };
   syncControls();
   render();
 });
@@ -311,13 +405,15 @@ function syncControls() {
   document.querySelectorAll('.toggle input[data-ws]').forEach(inp => {
     inp.checked = state.ws.has(+inp.dataset.ws);
   });
-  document.querySelectorAll('.seg-btn[data-term]').forEach(b => {
-    b.classList.toggle('is-active', +b.dataset.term === state.term);
-  });
 }
 
 syncControls();
 render();
+
+// Re-render dynamic content when language changes
+document.addEventListener('langchange', () => {
+  render();
+});
 
 // ============================================================
 //  AUTHORIZATION FORM — Export & Copy
@@ -334,77 +430,83 @@ function buildMemo() {
   };
 
   const c = compute();
+  const WS_WORD = t('js.workstream');
+  const monthWord = t('js.month');
 
   const wsLines = c.rows.map(r =>
-    `   • Workstream ${ {1:'I',2:'II',3:'III'}[r.id] } — ${r.name}: ${fmt(r.value)}`
+    `   • ${WS_WORD} ${ {1:'I',2:'II',3:'III'}[r.id] } — ${r.name} (${termShort(r.term)}): ${fmt(r.value)}${r.isInfoOnly ? '  [' + t('js.memo.advisoryNote') + ']' : ''}`
   ).join('\n');
 
-  // Per-workstream milestone schedule
+  // Per-workstream payment schedule
   const scheduleLines = c.rows.map(r => {
-    const ws = {1:'I',2:'II',3:'III'}[r.id];
-    let lines = `\n   Workstream ${ws} — ${r.name} (${fmt(r.value)} total)`;
-    lines += `\n      • Mobilization Fee (Month 0):                    ${fmt(r.fixed)}`;
-    r.milestones.forEach((m, i) => {
-      lines += `\n      • ${m.name} (Month ${m.month}):${' '.repeat(Math.max(2, 32 - m.name.length - String(m.month).length))}${fmt(m.amount)}`;
+    const wsR = {1:'I',2:'II',3:'III'}[r.id];
+    let lines = `\n   ${WS_WORD} ${wsR} — ${r.name} (${termShort(r.term)} · ${fmt(r.value)})`;
+    if (r.isInfoOnly) {
+      const advLines = t('js.memo.advisoryNoSchedule').split('\n');
+      advLines.forEach(line => { lines += `\n      • ${line}`; });
+      return lines;
+    }
+    lines += `\n      • ${t('js.memo.activationLine')}              ${fmt(r.activation)}`;
+    r.milestones.forEach((m) => {
+      const tail = ` (${monthWord} ${m.month}):`;
+      lines += `\n      • ${m.name}${tail}${' '.repeat(Math.max(2, 34 - m.name.length - tail.length))}${fmt(m.amount)}`;
     });
     return lines;
   }).join('\n');
 
   const auths = checked.length
     ? checked.map(x => `   ☒ ${x}`).join('\n')
-    : '   (no authorizations selected)';
+    : `   ${t('js.memo.noAuth')}`;
 
-  return `MINISTERIAL DECISION MEMORANDUM
-Republic of Ecuador — Strategic Partnership Initiative
-Prepared by: Trident Solutions, Strategic Advisory Division
-Date: ${rep.date}
+  return `${t('js.memo.title')}
+${t('js.memo.subtitle')}
+${t('js.memo.preparedBy')}
+${t('js.memo.date')} ${rep.date}
 
 ────────────────────────────────────────────────
-SELECTED CONFIGURATION
+${t('js.memo.config')}
 ────────────────────────────────────────────────
-   Program:        ${workstreamLabel()}
-   Term:           ${termLabel()}
-   Term Length:    ${c.months} months
+   ${t('js.memo.program')}        ${workstreamLabel()}
 
-   Workstreams included:
+   ${t('js.memo.wsIncluded')}
 ${wsLines}
 
-   Total Contract Value:                 ${fmt(c.total)}
+   ${t('js.memo.totalLine')}                 ${fmt(c.total)}
 
 ────────────────────────────────────────────────
-PAYMENT STRUCTURE
+${t('js.memo.payment')}
 ────────────────────────────────────────────────
-   Fixed Mobilization Fee  (${Math.round(c.fixedPct*100)}%):     ${fmt(c.totalFixed)}
-   Milestone Payments      (${Math.round((1-c.fixedPct)*100)}%):     ${fmt(c.totalMilestone)}
+   ${t('js.memo.activationFees')}               ${fmt(c.totalActivation)}
+   ${t('js.memo.milestonePmts')}                    ${fmt(c.totalMilestone)}
    ─────────────────────────────────────────
-   Total Contract Value:                  ${fmt(c.total)}
+   ${t('js.memo.totalLine')}                  ${fmt(c.total)}
 
-   Per-Workstream Schedule:
+   ${t('js.memo.perWS')}
 ${scheduleLines}
 
 ────────────────────────────────────────────────
-AUTHORIZATIONS REQUESTED
+${t('js.memo.authReq')}
 ────────────────────────────────────────────────
 ${auths}
 
 ────────────────────────────────────────────────
-GOVERNMENT REPRESENTATIVE
+${t('js.memo.govRep')}
 ────────────────────────────────────────────────
-   Name:             ${rep.name || '____________________________'}
-   Title:            ${rep.title || '____________________________'}
-   Agency/Ministry:  ${rep.agency || '____________________________'}
-   Signature:        ____________________________
-   Date:             ${rep.date}
+   ${t('js.memo.name')}             ${rep.name || '____________________________'}
+   ${t('js.memo.title2')}            ${rep.title || '____________________________'}
+   ${t('js.memo.agency')}  ${rep.agency || '____________________________'}
+   ${t('js.memo.signature')}        ____________________________
+   ${t('js.memo.dateField')}             ${rep.date}
+
 
 ────────────────────────────────────────────────
-POINTS OF CONTACT — TRIDENT SOLUTIONS
+${t('js.memo.poc')}
 ────────────────────────────────────────────────
-   Bruce Roberts     — Chief Executive Officer · Founding Partner
-   Nicholas Fowler   — President · Founding Partner
+   Bruce Roberts     — ${t('js.memo.r.title')}
+   Nicholas Fowler   — ${t('js.memo.f.title')}
 
-   Trident Solutions — Strategic Advisory Division
-   National Security Modernization · Sovereign Capability Development
-   Strategic Resource Security · Industrial Development
+   ${t('js.memo.tridentDiv')}
+   ${t('js.memo.tagline')}
 `;
 }
 
@@ -419,12 +521,12 @@ document.getElementById('copy-btn').addEventListener('click', async () => {
   const memo = buildMemo();
   try {
     await navigator.clipboard.writeText(memo);
-    setStatus('Decision memorandum copied to clipboard.');
+    setStatus(t('js.status.copied'));
   } catch {
     const ta = document.createElement('textarea');
     ta.value = memo; document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); ta.remove();
-    setStatus('Decision memorandum copied to clipboard.');
+    setStatus(t('js.status.copied'));
   }
 });
 
@@ -432,11 +534,13 @@ document.getElementById('print-btn').addEventListener('click', () => {
   const memo = buildMemo();
   const w = window.open('', '_blank');
   if (!w) {
-    setStatus('Pop-up blocked. Please allow pop-ups to export the memorandum.');
+    setStatus(t('js.status.popup'));
     return;
   }
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8">
-    <title>Ministerial Decision Memorandum — Republic of Ecuador</title>
+  const lang = (window.I18N && window.I18N.lang) || 'en';
+  const docLang = lang === 'es' ? 'es-EC' : 'en';
+  w.document.write(`<!doctype html><html lang="${docLang}"><head><meta charset="utf-8">
+    <title>${t('js.memo.printTitle')}</title>
     <style>
       @page { margin: 0.75in; }
       body{ font-family: Georgia, "Times New Roman", serif; color:#111;
@@ -454,7 +558,7 @@ document.getElementById('print-btn').addEventListener('click', () => {
     </head><body>
     <div class="seal">⚜</div>
     <h1>Trident Solutions</h1>
-    <div class="sub">Strategic Advisory Division · Ministerial Decision Memorandum</div>
+    <div class="sub">${t('js.memo.printSub')}</div>
     <hr>
     <pre>${memo.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre>
     </body></html>`);
