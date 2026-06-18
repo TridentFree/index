@@ -717,139 +717,56 @@ table.dx tbody th span{display:block;font-size:11px;letter-spacing:.22em;color:v
 @media (max-width:680px){.cmp-list{grid-template-columns:1fr}}
 
 /* ============ AUTHORIZATION FORM ============ */
-/* Aggressive resets so WordPress theme CSS cannot break the layout */
-.auth, .auth *{box-sizing:border-box !important}
 .auth{
-  margin-top:40px !important;
-  background:var(--panel) !important;
-  border:1px solid var(--line) !important;
-  padding:40px !important;
-  display:block !important;
-  width:100% !important;
-  max-width:100% !important;
-  float:none !important;
-  clear:both !important;
-  position:relative !important;
+  margin-top:40px;
+  background:var(--panel);border:1px solid var(--line);padding:40px;
+  display:block;width:100%;box-sizing:border-box;
 }
 .auth fieldset{
-  border:0 !important;
-  margin:0 0 32px 0 !important;
-  padding:0 !important;
-  display:block !important;
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  float:none !important;
+  border:0;margin:0 0 32px 0;padding:0;
+  display:block;width:100%;box-sizing:border-box;
+  min-width:0;
 }
-.auth fieldset:last-of-type{margin-bottom:0 !important}
+.auth fieldset:last-of-type{margin-bottom:0}
+.auth label{display:flex}
+.auth label.auth-row{display:flex}
 .auth legend{
-  font-family:var(--serif) !important;
-  font-size:13px !important;
-  letter-spacing:.28em !important;
-  text-transform:uppercase !important;
-  color:var(--gold) !important;
-  margin:0 0 18px 0 !important;
-  padding:0 !important;
-  display:block !important;
-  width:100% !important;
-  float:none !important;
+  font-family:var(--serif);font-size:13px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;
 }
-
-/* The row: GRID layout — checkbox column + label column. */
-/* Specificity stacked via repeated classes so even WP theme rules using !important cannot override. */
-.auth .auth-row.auth-row.auth-row,
-label.auth-row.auth-row.auth-row,
-.auth label.auth-row.auth-row.auth-row{
-  display:grid !important;
-  grid-template-columns:18px 1fr !important;
-  grid-template-rows:auto !important;
-  align-items:center !important;
-  gap:14px !important;
-  padding:14px 18px !important;
-  margin:0 0 10px 0 !important;
-  border:1px solid var(--line) !important;
-  background:var(--bg-3) !important;
-  cursor:pointer !important;
-  color:var(--ink-2) !important;
-  font-family:var(--sans) !important;
-  font-size:14.5px !important;
-  line-height:1.45 !important;
+.auth-row{
+  display:flex !important;align-items:center;gap:14px;
+  padding:14px 18px;border:1px solid var(--line);background:var(--bg-3);
+  cursor:pointer;margin-bottom:10px;
+  color:var(--ink-2);font-size:14.5px;line-height:1.45;
   transition: border-color .2s, color .2s;
-  position:relative !important;
-  width:100% !important;
-  max-width:100% !important;
-  min-height:48px !important;
-  float:none !important;
-  text-align:left !important;
+  position:relative;
+  width:100%;box-sizing:border-box;
 }
-.auth-row:hover{border-color:var(--gold-line) !important;color:#fff !important}
-
-/* Visually hidden native checkbox */
+.auth-row:hover{border-color:var(--gold-line);color:#fff}
 .auth-row input[type="checkbox"]{
-  position:absolute !important;
-  width:1px !important;
-  height:1px !important;
-  overflow:hidden !important;
-  clip:rect(0 0 0 0) !important;
-  clip-path:inset(50%) !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:0 !important;
+  position:absolute !important;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);opacity:0;pointer-events:none;
+  margin:0;padding:0;
 }
-
-/* Custom checkbox visual — first child span */
-.auth .auth-row > span:first-of-type,
-.auth-row.auth-row.auth-row > span:first-of-type{
-  grid-column:1 !important;
-  grid-row:1 !important;
-  display:inline-grid !important;
-  place-items:center !important;
-  width:18px !important;
-  height:18px !important;
-  min-width:18px !important;
-  border:1px solid var(--gold-line) !important;
-  background:transparent !important;
-  position:relative !important;
-  margin:0 !important;
-  padding:0 !important;
-  flex:none !important;
+.auth-row > span:first-of-type{
+  flex:0 0 18px;width:18px;height:18px;
+  border:1px solid var(--gold-line);
+  display:grid;place-items:center;position:relative;
+  box-sizing:border-box;
 }
 .auth-row > span:first-of-type::after{
-  content:"" !important;
-  width:10px;height:10px;
-  background:var(--gold);
-  transform:scale(0);
-  transition:transform .15s var(--ease);
-  display:block;
+  content:"";width:10px;height:10px;background:var(--gold);
+  transform:scale(0);transition:transform .15s var(--ease);
 }
-.auth-row input:checked + span::after{transform:scale(1) !important}
-.auth-row input:checked ~ .auth-label{color:#fff !important}
-
-/* The label text — second grid column. Must NEVER shrink to one-word-per-line. */
-.auth .auth-row .auth-label.auth-label.auth-label,
-.auth-row .auth-label.auth-label.auth-label{
-  grid-column:2 !important;
-  grid-row:1 !important;
-  display:block !important;
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:0 !important;
-  background:transparent !important;
-  font-family:var(--sans) !important;
-  font-size:14.5px !important;
-  line-height:1.45 !important;
-  color:inherit !important;
-  text-align:left !important;
-  white-space:normal !important;
-  word-wrap:break-word !important;
-  overflow-wrap:break-word !important;
-  hyphens:auto;
-  float:none !important;
+.auth-row input:checked + span::after{transform:scale(1)}
+.auth-row input:checked ~ *{color:#fff}
+.auth-row .auth-label{
+  flex:1 1 auto;min-width:0;
+  display:block;
+  word-wrap:break-word;overflow-wrap:break-word;
+  border:0;background:transparent;
+  width:auto;height:auto;
 }
 
 .rep{padding-top:24px;border-top:1px solid var(--line) !important;border:0}
@@ -870,6 +787,27 @@ label.auth-row.auth-row.auth-row,
 
 .auth-actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
 .auth-note{margin-top:18px;font-size:12.5px;color:var(--gold);letter-spacing:.06em;min-height:1.2em}
+
+/* ============ DISCLAIMER ============ */
+.disclaimer-section{padding: clamp(40px, 6vw, 80px) 0 clamp(60px, 8vw, 100px);background:var(--bg-2)}
+.disclaimer-box{
+  margin-top:18px;
+  background:var(--panel);border:1px solid var(--gold-line);
+  padding:28px 32px;
+  border-left:3px solid var(--gold);
+}
+.disclaimer-label{
+  font-family:var(--serif);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 12px;
+}
+.disclaimer-text{
+  color:var(--ink-2);font-size:13.5px;line-height:1.7;
+  letter-spacing:.01em;margin:0;
+}
+@media (max-width:600px){
+  .disclaimer-box{padding:22px 20px}
+  .disclaimer-text{font-size:13px}
+}
 
 /* ============ CONTACT / FOOT ============ */
 .contact .container{padding-top:0}
