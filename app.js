@@ -405,19 +405,6 @@ POINTS OF CONTACT — TRIDENT SOLUTIONS
    Trident Solutions — Strategic Advisory Division
    National Security Modernization · Sovereign Capability Development
    Strategic Resource Security · Industrial Development
-
-────────────────────────────────────────────────
-DISCLAIMER
-────────────────────────────────────────────────
-   This presentation is provided solely for discussion and
-   negotiation purposes. Nothing contained herein shall be
-   construed as creating any legally binding obligation,
-   commitment, or liability, financial or otherwise, on the
-   part of either party. Any binding rights or obligations
-   shall arise only upon the execution of definitive written
-   agreements, including but not limited to formal contracts,
-   Statements of Work (SOWs), or other duly authorized
-   documents.
 `;
 }
 

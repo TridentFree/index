@@ -788,27 +788,6 @@ table.dx tbody th span{display:block;font-size:11px;letter-spacing:.22em;color:v
 .auth-actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
 .auth-note{margin-top:18px;font-size:12.5px;color:var(--gold);letter-spacing:.06em;min-height:1.2em}
 
-/* ============ DISCLAIMER ============ */
-.disclaimer-section{padding: clamp(40px, 6vw, 80px) 0 clamp(60px, 8vw, 100px);background:var(--bg-2)}
-.disclaimer-box{
-  margin-top:18px;
-  background:var(--panel);border:1px solid var(--gold-line);
-  padding:28px 32px;
-  border-left:3px solid var(--gold);
-}
-.disclaimer-label{
-  font-family:var(--serif);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
-  color:var(--gold);margin:0 0 12px;
-}
-.disclaimer-text{
-  color:var(--ink-2);font-size:13.5px;line-height:1.7;
-  letter-spacing:.01em;margin:0;
-}
-@media (max-width:600px){
-  .disclaimer-box{padding:22px 20px}
-  .disclaimer-text{font-size:13px}
-}
-
 /* ============ CONTACT / FOOT ============ */
 .contact .container{padding-top:0}
 .contact-grid{
